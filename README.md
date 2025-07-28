@@ -106,11 +106,11 @@ yarn format
 
 Aşağıya proje çalışırken alınmış bazı ekran görüntülerini görebilirsiniz
 
-```
+
 ![Project Screenshot](./screenshots/home.png)
 ![Project Screenshot](./screenshots/cart.png)
 ![Project Screenshot](./screenshots/product-detail.png)
-```
+
 
 ---
 
