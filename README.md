@@ -104,12 +104,12 @@ yarn format
 
 ## 📸 Ekran Görüntüleri
 
-Aşağıya proje çalışırken alınmış bazı ekran görüntülerini ekleyebilirsin:
+Aşağıya proje çalışırken alınmış bazı ekran görüntülerini görebilirsiniz
 
 ```
-📷 ./screenshots/home.png
-📷 ./screenshots/cart.png
-📷 ./screenshots/product-detail.png
+![Project Screenshot](./screenshots/home.png)
+![Project Screenshot](./screenshots/cart.png)
+![Project Screenshot](./screenshots/product-detail.png)
 ```
 
 ---
