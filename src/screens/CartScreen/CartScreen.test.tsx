@@ -1,0 +1,99 @@
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import CartScreen from './CartScreen';
+import { useCardStore } from '../../store/CardStore';
+import { ThemeProvider } from '../../theme/ThemeContext';
+import Toast from 'react-native-toast-message';
+import { Product } from '../../types';
+import { Alert } from 'react-native';
+
+// Mock Navigation
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({ goBack: jest.fn() }),
+}));
+
+// Mock Toast
+jest.mock('react-native-toast-message', () => ({
+  show: jest.fn(),
+}));
+
+// Silence animation warning
+jest.mock('lottie-react-native', () => 'LottieView');
+
+// Sample product
+const mockProduct: Product = {
+  id: 1,
+  title: 'Mock Product',
+  price: 100,
+} as Partial<Product> as Product;
+
+const customWrapper = ({ children }: any) => <ThemeProvider>{children}</ThemeProvider>;
+
+describe('CartScreen', () => {
+  beforeEach(() => {
+    useCardStore.getState().clearCard();
+    jest.clearAllMocks();
+  });
+
+  it('renders empty cart message', async () => {
+    const { getByText } = await waitFor(() => render(<CartScreen route={{}} />, { wrapper: customWrapper }));
+    expect(getByText('Sepetinizde hiç ürün yok.')).toBeTruthy();
+  });
+
+  it('renders a cart item', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByText } = await waitFor(() => render(<CartScreen route={{}} />, { wrapper: customWrapper }));
+    expect(getByText('Mock Product')).toBeTruthy();
+    expect(getByText('Satın Al')).toBeTruthy();
+  });
+
+  it('selects and deletes a product from cart', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((title, message, buttons) => {
+      console.log('message', message);
+      expect(title).toBe('Silme Onayı');
+      expect(message).toBe('Seçilen ürün(ler)i sepetten silmek istediğinize emin misiniz?');
+      const deleteButton = buttons?.find((b) => b.text === 'Sil');
+      deleteButton?.onPress?.();
+    });
+    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+
+    const checkbox = getByTestId('select-all-button');
+    fireEvent.press(checkbox);
+    const trashIcon = getByTestId('delete-button');
+    fireEvent.press(trashIcon);
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalled();
+    });
+  });
+
+  it('buys product and shows animation + toast', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+    const buyButton = getByTestId('buy-button');
+    fireEvent.press(buyButton);
+
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'success',
+          text1: 'Siparişiniz alındı!',
+        }),
+      );
+    });
+
+    expect(useCardStore.getState().card).toHaveLength(0);
+  });
+
+  it('select all and deselect all works correctly', () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+    const selectAll = getByTestId('select-all-button');
+    fireEvent.press(selectAll);
+    fireEvent.press(selectAll);
+    // console.log( getByTestId('checkbox').props.value);
+    expect(getByTestId('checkbox').props.value).toBeFalsy();
+  });
+});
