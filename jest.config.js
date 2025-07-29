@@ -12,6 +12,7 @@ module.exports = {
     '!src/components/**/index.{ts,tsx}',
     '!src/**/*.stories.{ts,tsx}',
     '!src/**/*.style.ts',
+    '!src/**/*.styles.ts',
     '!src/styles/**/*',
   ],
   coverageThreshold: {

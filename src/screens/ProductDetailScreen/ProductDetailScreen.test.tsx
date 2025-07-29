@@ -6,7 +6,6 @@ import { useCardStore } from '../../store/CardStore';
 import Toast from 'react-native-toast-message';
 import { Share } from 'react-native';
 
-// Mock theme context
 jest.mock('../../theme/ThemeContext', () => ({
   useTheme: () => ({
     theme: {
@@ -22,7 +21,6 @@ jest.mock('../../theme/ThemeContext', () => ({
   }),
 }));
 
-// Mock navigation
 const mockGoBack = jest.fn();
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
@@ -30,23 +28,10 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }));
 
-// Mock Toast
 jest.mock('react-native-toast-message', () => ({
   show: jest.fn(),
 }));
 
-// Mock Share
-// jest.mock('react-native', () => {
-//   const RN = jest.requireActual('react-native');
-//   return {
-//     ...RN,
-//     Share: {
-//       share: jest.fn(),
-//     },
-//   };
-// });
-
-// Mock api.fetchProductById
 const mockProduct = {
   id: 1,
   title: 'Test Product',
@@ -74,6 +59,17 @@ describe('ProductDetailScreen', () => {
     const route = { params: { productId: 1 } };
     const { getByTestId } = render(<ProductDetailScreen route={route as any} navigation={mockNavigation as any} />);
     expect(getByTestId('loading-indicator')).toBeTruthy();
+  });
+
+  it('renders product metadata correctly', async () => {
+    jest.spyOn(api, 'fetchProductById').mockResolvedValue(mockProduct);
+    const route = { params: { productId: 1 } };
+    const { getByText } = render(<ProductDetailScreen route={route as any} navigation={mockNavigation as any} />);
+    await waitFor(() => getByText(mockProduct.title));
+    expect(getByText(mockProduct.rating.toString())).toBeTruthy(); // Yıldız puanı
+    expect(getByText(mockProduct.reviews.length.toString())).toBeTruthy(); // Yorum sayısı
+    expect(getByText('Smartphones')).toBeTruthy(); // categoryText eşleşmesine göre (örnek: smartphones = Akıllı Telefonlar)
+    expect(getByText(mockProduct.stock.toString())).toBeTruthy(); // stok sayısı
   });
 
   it('renders product details after fetch', async () => {
@@ -135,5 +131,20 @@ describe('ProductDetailScreen', () => {
     });
     fireEvent.press(getByTestId('back-button'));
     expect(mockGoBack).toHaveBeenCalled();
+  });
+  it('shows error toast when stokControl returns false', async () => {
+    jest.spyOn(api, 'fetchProductById').mockResolvedValue(mockProduct);
+    const stokControlMock = jest.spyOn(useCardStore.getState(), 'stokControl').mockReturnValue(false);
+    const route = { params: { productId: 1 } };
+    const { getByTestId, getByText } = render(<ProductDetailScreen route={route as any} navigation={mockNavigation as any} />);
+    await waitFor(() => getByText(mockProduct.title));
+    fireEvent.press(getByTestId('add-to-cart-button'));
+    expect(stokControlMock).toHaveBeenCalledWith(mockProduct.id);
+    expect(Toast.show).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'error',
+        text1: 'Stok yetersiz!',
+      }),
+    );
   });
 });

@@ -100,4 +100,68 @@ describe('CartScreen', () => {
     // console.log( getByTestId('checkbox').props.value);
     expect(getByTestId('checkbox').props.value).toBeFalsy();
   });
+  it('removes item after delete confirmation', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByTestId, queryByText } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
+    fireEvent.press(getByTestId('select-all-button'));
+    fireEvent.press(getByTestId('delete-button'));
+    await waitFor(() => {
+      expect(queryByText('Mock Product')).toBeNull();
+    });
+  });
+  it('shows animation after purchase', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByTestId, getByText } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
+    fireEvent.press(getByTestId('buy-button'));
+    await waitFor(() => {
+      expect(getByText('Satın Al')).toBeTruthy();
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text1: 'Siparişiniz alındı!',
+        }),
+      );
+    });
+  });
+  it('calculates total price correctly', () => {
+    useCardStore.getState().addToCard({ ...mockProduct, price: 200 });
+    useCardStore.getState().addToCard({ ...mockProduct, id: 2, price: 100 });
+
+    const { getByText } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
+
+    expect(getByText('300.00 ₺')).toBeTruthy();
+  });
+  it('selects all and deselects all items correctly', () => {
+    useCardStore.getState().addToCard({ ...mockProduct });
+    useCardStore.getState().addToCard({ ...mockProduct, id: 2 });
+    const { getByTestId } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
+    const selectAll = getByTestId('select-all-button');
+    fireEvent.press(selectAll);
+    waitFor(() => {
+      expect(getByTestId('checkbox').props.value).toBeTruthy();
+    });
+    fireEvent.press(selectAll);
+    waitFor(() => {
+      expect(getByTestId('checkbox').props.value).toBeFalsy();
+    });
+  });
+
+  it('should toggle select state when item checkbox is pressed', async () => {
+    useCardStore.getState().addToCard(mockProduct);
+    const { getByText, getByTestId } = await waitFor(() =>
+      render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper }),
+    );
+    expect(getByText('Mock Product')).toBeTruthy();
+    const itemCheckbox = getByTestId('item-checkbox-1');
+    waitFor(() => {
+      expect(itemCheckbox.props.value).toBe(false);
+    });
+    fireEvent.press(itemCheckbox);
+    waitFor(() => {
+      expect(itemCheckbox.props.value).toBe(true);
+    });
+    fireEvent.press(itemCheckbox);
+    waitFor(() => {
+      expect(itemCheckbox.props.value).toBe(false);
+    });
+  });
 });

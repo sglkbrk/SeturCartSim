@@ -1,12 +1,6 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'https://dummyjson.com';
-
-export const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-});
-
 export const fetchProducts = async (skip: number, limit: number, category?: string, search?: string) => {
   try {
     let url = '';
@@ -18,7 +12,7 @@ export const fetchProducts = async (skip: number, limit: number, category?: stri
       url = `/products?limit=${limit}&skip=${skip}`;
     }
     console.log(url);
-    const response = await api.get(url);
+    const response = await axios.get(API_BASE_URL + url);
     return response.data;
   } catch (error) {
     console.error('Ürünler alınamadı:', error);
@@ -28,7 +22,7 @@ export const fetchProducts = async (skip: number, limit: number, category?: stri
 
 export const fetchCategories = async () => {
   try {
-    const response = await api.get('/products/categories');
+    const response = await axios.get(API_BASE_URL + '/products/categories');
     return response.data;
   } catch (error) {
     console.error('Kategori listesi alınamadı:', error);
@@ -38,7 +32,7 @@ export const fetchCategories = async () => {
 
 export const fetchProductById = async (productId: number) => {
   try {
-    const response = await api.get(`/products/${productId}`);
+    const response = await axios.get(API_BASE_URL + `/products/${productId}`);
     return response.data;
   } catch (error) {
     console.error('Ürün alınamadı:', error);

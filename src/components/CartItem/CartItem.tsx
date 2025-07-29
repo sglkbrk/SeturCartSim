@@ -21,7 +21,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, isSelected, toggleSelect, add
   const [imageLoading, setImageLoading] = useState(true);
   return (
     <TouchableOpacity style={[styles.cardItem]} onPress={onPress}>
-      <Checkbox value={isSelected} onValueChange={() => toggleSelect(item.product.id)} />
+      <Checkbox testID={`item-checkbox-${item.product.id}`} value={isSelected} onValueChange={() => toggleSelect(item.product.id)} />
       {imageLoading && <ActivityIndicator style={{ position: 'absolute' }} size="small" color={theme.primary} />}
       <Image
         source={{ uri: item.product.thumbnail }}

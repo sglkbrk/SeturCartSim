@@ -171,7 +171,12 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
                   },
                 ]}
               >
-                <Ionicons name={categoryIcons[item.slug]} size={24} color={selectedCategory.slug === item.slug ? theme.background : theme.primary} />
+                <Ionicons
+                  testID={`icon-${item.slug}`}
+                  name={categoryIcons[item.slug]}
+                  size={24}
+                  color={selectedCategory.slug === item.slug ? theme.background : theme.primary}
+                />
               </TouchableOpacity>
               <Text numberOfLines={1} style={[styles.categoryText, { color: theme.secondaryText }]}>
                 {item.name}
@@ -188,6 +193,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={[styles.productHeaderText, { color: theme.text }]}>Ürünler</Text>
       </View>
       <FlatList
+        testID="product-list"
         ref={flatListRef}
         showsVerticalScrollIndicator={false}
         style={styles.productList}
@@ -208,7 +214,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
         columnWrapperStyle={styles.productColumn}
         onEndReached={() => getProducts(skip, hasMore, selectedCategory.slug, debouncedSearch)}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={loading ? <ActivityIndicator size="small" /> : null}
+        ListFooterComponent={loading ? <ActivityIndicator testID="ActivityIndicator" size="small" /> : null}
       />
     </View>
   );
