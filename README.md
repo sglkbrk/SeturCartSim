@@ -105,7 +105,7 @@ yarn format
 
 ## 📸 Ekran Görüntüleri
 
-Aşağıya proje çalışırken alınmış bazı ekran görüntülerini görebilirsiniz
+Aşağıda proje çalışırken alınmış bazı ekran görüntülerini görebilirsiniz
 
 - ./screenshots/home.png
 - ./screenshots/cart.png
