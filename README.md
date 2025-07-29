@@ -8,6 +8,7 @@ React Native + Expo ile geliştirilmiş bir mobil alışveriş sepeti simülasyo
 - 🛒 Sepete ürün ekleme, çıkarma, miktar azaltma
 - 📦 Ürün stok kontrolü
 - 🔍 Arama özelliği
+- 🎬 LottieView ile akıcı animasyonlar
 - 📊 Jest ile test altyapısı
 - 🧹 ESLint + Prettier ile kod kalitesi ve formatlama
 - 🌐 Expo ile Android, iOS ve Web desteği
