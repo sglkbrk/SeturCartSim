@@ -32,7 +32,7 @@ type ProductDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'Prod
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
   const { theme } = useTheme();
-  const { addToCard } = useCardStore();
+  const { addToCard, stokControl } = useCardStore();
   const { toggleFavorite, isFavorite } = useFavoriteStore();
   const navigation = useNavigation();
   const { productId } = route.params;
@@ -56,7 +56,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
     try {
       const res = await fetchProductById(productId);
       setProduct(res);
-    } catch (error) {
+    } catch {
       setProduct(null);
     }
     setLoading(false);
@@ -73,6 +73,15 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
 
   const addToCardHandler = () => {
     if (product) {
+      if (!stokControl(product.id)) {
+        Toast.show({
+          type: 'error',
+          text1: 'Stok yetersiz!',
+          position: 'bottom',
+          visibilityTime: 1000,
+        });
+        return;
+      }
       addToCard(product);
       Toast.show({
         type: 'info',
@@ -170,7 +179,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
 
         <View style={[styles.priceContainer, { backgroundColor: theme.background }]}>
           <Text style={styles.price}>₺{product.price.toFixed(2)}</Text>
-          <Text style={[styles.installment, { color: theme.secondaryText }]}> ₺{(product.price / 9).toFixed(2)} x 9 Taksitler</Text>
+          <Text style={[styles.installment, { color: theme.secondaryText }]}> ₺{(product.price / 9).toFixed(2)} x 9 Taksit</Text>
           <View style={styles.discountContainer}>
             <Text style={[styles.discount, { color: theme.accentGreen }]}>-{product.discountPercentage}%</Text>
           </View>

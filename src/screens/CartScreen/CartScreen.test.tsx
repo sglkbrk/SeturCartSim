@@ -26,6 +26,8 @@ const mockProduct: Product = {
   title: 'Mock Product',
   price: 100,
 } as Partial<Product> as Product;
+const route = { params: {} };
+const mockNavigation = { navigate: jest.fn() };
 
 const customWrapper = ({ children }: any) => <ThemeProvider>{children}</ThemeProvider>;
 
@@ -36,28 +38,30 @@ describe('CartScreen', () => {
   });
 
   it('renders empty cart message', async () => {
-    const { getByText } = await waitFor(() => render(<CartScreen route={{}} />, { wrapper: customWrapper }));
+    const { getByText } = await waitFor(() =>
+      render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper }),
+    );
     expect(getByText('Sepetinizde hiç ürün yok.')).toBeTruthy();
   });
 
   it('renders a cart item', async () => {
     useCardStore.getState().addToCard(mockProduct);
-    const { getByText } = await waitFor(() => render(<CartScreen route={{}} />, { wrapper: customWrapper }));
+    const { getByText } = await waitFor(() =>
+      render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper }),
+    );
     expect(getByText('Mock Product')).toBeTruthy();
     expect(getByText('Satın Al')).toBeTruthy();
   });
 
   it('selects and deletes a product from cart', async () => {
     useCardStore.getState().addToCard(mockProduct);
-
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((title, message, buttons) => {
-      console.log('message', message);
       expect(title).toBe('Silme Onayı');
       expect(message).toBe('Seçilen ürün(ler)i sepetten silmek istediğinize emin misiniz?');
       const deleteButton = buttons?.find((b) => b.text === 'Sil');
       deleteButton?.onPress?.();
     });
-    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+    const { getByTestId } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
 
     const checkbox = getByTestId('select-all-button');
     fireEvent.press(checkbox);
@@ -71,7 +75,7 @@ describe('CartScreen', () => {
 
   it('buys product and shows animation + toast', async () => {
     useCardStore.getState().addToCard(mockProduct);
-    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+    const { getByTestId } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
     const buyButton = getByTestId('buy-button');
     fireEvent.press(buyButton);
 
@@ -89,7 +93,7 @@ describe('CartScreen', () => {
 
   it('select all and deselect all works correctly', () => {
     useCardStore.getState().addToCard(mockProduct);
-    const { getByTestId } = render(<CartScreen route={{}} />, { wrapper: customWrapper });
+    const { getByTestId } = render(<CartScreen route={route as any} navigation={mockNavigation as any} />, { wrapper: customWrapper });
     const selectAll = getByTestId('select-all-button');
     fireEvent.press(selectAll);
     fireEvent.press(selectAll);

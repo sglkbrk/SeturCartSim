@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
+import SandyLoading from '../../../assets/animations/SandyLoading.json';
+import shoppingcart from '../../../assets/animations/shoppingcart.json';
+import Loading from '../../../assets/animations/Loading.json';
 
 type animationType = 'SandyLoading' | 'shoppingcart' | 'Loading';
 type Props = {
@@ -37,11 +40,11 @@ const LottieViewAnimation = ({ animation, position, visible, onFinish, size = 20
 const getAnimationSource = (name: animationType) => {
   switch (name) {
     case 'SandyLoading':
-      return require('../../../assets/animations/SandyLoading.json');
+      return SandyLoading;
     case 'shoppingcart':
-      return require('../../../assets/animations/shoppingcart.json');
+      return shoppingcart;
     case 'Loading':
-      return require('../../../assets/animations/Loading.json');
+      return Loading;
   }
 };
 

@@ -8,6 +8,7 @@ describe('useCardStore', () => {
     title: 'Test Product',
     price: 100,
     thumbnail: 'https://dummyimage.com/100',
+    stock: 10,
   } as Partial<Product> as Product;
 
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('useCardStore', () => {
     }
   });
 
-  it('aynı ürün tekrar eklendiğinde quantity artmalı', () => {
+  it('The same product should not be added twice to the cart.', () => {
     act(() => {
       useCardStore.getState().addToCard(sampleProduct);
       useCardStore.getState().addToCard(sampleProduct);
@@ -84,5 +85,18 @@ describe('useCardStore', () => {
     });
     const card = useCardStore.getState().card;
     expect(card).toHaveLength(0);
+  });
+  it('stokControl returns true if product is not in cart yet', () => {
+    const result = useCardStore.getState().stokControl(sampleProduct.id);
+    expect(result).toBe(true);
+  });
+  it('stokControl returns false if product quantity in cart equals stock', () => {
+    act(() => {
+      for (let i = 0; i < sampleProduct.stock; i++) {
+        useCardStore.getState().addToCard(sampleProduct);
+      }
+    });
+    const result = useCardStore.getState().stokControl(sampleProduct.id);
+    expect(result).toBe(false); // 10 == 10  false
   });
 });

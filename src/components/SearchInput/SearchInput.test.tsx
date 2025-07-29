@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import SearchInput from './SearchInput';
 import { ThemeProvider } from '../../theme/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider>{ui}</ThemeProvider>);
@@ -31,7 +32,7 @@ describe('SearchInput', () => {
 
   it('renders search icon', async () => {
     const { UNSAFE_getAllByType } = await waitFor(() => renderWithTheme(<SearchInput onChangeText={() => {}} />));
-    const icons = UNSAFE_getAllByType(require('@expo/vector-icons').Ionicons);
+    const icons = UNSAFE_getAllByType(Ionicons);
     expect(icons.length).toBeGreaterThan(0);
     expect(icons[0].props.name).toBe('search');
   });

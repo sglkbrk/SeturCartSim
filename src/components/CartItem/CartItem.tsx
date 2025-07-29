@@ -11,15 +11,16 @@ interface CartItemProps {
   isSelected: boolean;
   toggleSelect: (productId: number) => void;
   addToCard: (product: Card['product']) => void;
+  onPress: () => void;
   decreaseQuantity: (productId: number) => void;
   removeFromCard: (productId: number) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, isSelected, toggleSelect, addToCard, decreaseQuantity, removeFromCard }) => {
+const CartItem: React.FC<CartItemProps> = ({ item, isSelected, toggleSelect, addToCard, onPress, decreaseQuantity, removeFromCard }) => {
   const { theme } = useTheme();
   const [imageLoading, setImageLoading] = useState(true);
   return (
-    <View style={[styles.cardItem]}>
+    <TouchableOpacity style={[styles.cardItem]} onPress={onPress}>
       <Checkbox value={isSelected} onValueChange={() => toggleSelect(item.product.id)} />
       {imageLoading && <ActivityIndicator style={{ position: 'absolute' }} size="small" color={theme.primary} />}
       <Image
@@ -45,7 +46,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, isSelected, toggleSelect, add
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

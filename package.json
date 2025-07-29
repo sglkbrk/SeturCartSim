@@ -16,6 +16,7 @@
     "coverage": "yarn run test --coverage"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.28.0",
     "@expo-google-fonts/poppins": "^0.4.0",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-masked-view/masked-view": "0.3.2",
@@ -25,9 +26,9 @@
     "@types/jest": "^30.0.0",
     "axios": "^1.11.0",
     "babel-jest": "^30.0.4",
-    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-jest": "^29.0.1",
-    "eslint-plugin-jsdoc": "^52.0.0",
+    "eslint-plugin-react": "^7.37.5",
     "expo": "~53.0.20",
     "expo-checkbox": "^4.1.4",
     "expo-status-bar": "~2.2.3",
@@ -44,10 +45,13 @@
     "react-native-testing-library": "^6.0.0",
     "react-native-toast-message": "^2.3.3",
     "react-native-vector-icons": "^10.3.0",
+    "typescript-eslint": "^8.38.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.32.0",
     "@types/react": "~19.0.10",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",

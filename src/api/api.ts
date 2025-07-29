@@ -17,9 +17,11 @@ export const fetchProducts = async (skip: number, limit: number, category?: stri
     } else {
       url = `/products?limit=${limit}&skip=${skip}`;
     }
+    console.log(url);
     const response = await api.get(url);
     return response.data;
   } catch (error) {
+    console.error('Ürünler alınamadı:', error);
     throw error;
   }
 };
@@ -29,6 +31,7 @@ export const fetchCategories = async () => {
     const response = await api.get('/products/categories');
     return response.data;
   } catch (error) {
+    console.error('Kategori listesi alınamadı:', error);
     throw error;
   }
 };
@@ -38,6 +41,7 @@ export const fetchProductById = async (productId: number) => {
     const response = await api.get(`/products/${productId}`);
     return response.data;
   } catch (error) {
+    console.error('Ürün alınamadı:', error);
     throw error;
   }
 };

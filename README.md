@@ -6,6 +6,7 @@ React Native + Expo ile geliştirilmiş bir mobil alışveriş sepeti simülasyo
 
 - ✅ Ürünleri listeleme ve kategorilere göre filtreleme
 - 🛒 Sepete ürün ekleme, çıkarma, miktar azaltma
+- 📦 Ürün stok kontrolü
 - 🔍 Arama özelliği
 - 📊 Jest ile test altyapısı
 - 🧹 ESLint + Prettier ile kod kalitesi ve formatlama
@@ -17,7 +18,7 @@ React Native + Expo ile geliştirilmiş bir mobil alışveriş sepeti simülasyo
 ```
 src/
 │
-├── components/        # Ortak bileşenler (ProductCard, CategoryList)
+├── components/        # Ortak bileşenler (ProductCard)
 ├── screens/           # Sayfalar (HomeScreen, CartScreen)
 ├── store/             # Zustand store'ları (useCartStore)
 ├── types/             # Tip tanımları (Product, Category)
@@ -106,11 +107,9 @@ yarn format
 
 Aşağıya proje çalışırken alınmış bazı ekran görüntülerini görebilirsiniz
 
-
-![Project Screenshot](./screenshots/home.png)
-![Project Screenshot](./screenshots/cart.png)
-![Project Screenshot](./screenshots/product-detail.png)
-
+- ./screenshots/home.png
+- ./screenshots/cart.png
+- ./screenshots/product-detail.png
 
 ---
 

@@ -1,40 +1,36 @@
-const typeScriptEsLintPlugin = require('@typescript-eslint/eslint-plugin');
-const esLintConfigPrettier = require('eslint-config-prettier');
-const { FlatCompat } = require('@eslint/eslintrc');
+// eslint.config.js
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import globals from 'globals';
 
-// Translate ESLintRC-style configs into flat configs.
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: typeScriptEsLintPlugin.configs['recommended'],
-});
-
-module.exports = [
-  // ESLint recommended flat config.
-  'eslint:recommended',
-
-  // Flat config for parsing TypeScript files. Includes rules for TypeScript.
-  ...compat.config({
-    env: { node: true },
-    extends: ['plugin:@typescript-eslint/recommended'],
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
-    plugins: ['@typescript-eslint'],
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-empty-interface': 'error',
-    },
-  }),
-
-  // Flat config for turning off all rules that are unnecessary or might conflict with Prettier.
-  esLintConfigPrettier,
-
-  // Flat config for ESLint rules.
+export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        jest: true,
+      },
+    },
     rules: {
-      camelcase: ['error', { ignoreDestructuring: true }],
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    // Jest, babel ve config dosyaları Node ortamında
+    files: ['*.config.js', '**/jest.setup.js', '**/*.test.ts', '**/*.test.tsx'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        jest: true,
+      },
     },
   },
 ];

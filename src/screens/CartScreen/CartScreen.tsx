@@ -3,17 +3,19 @@ import { View, Text, FlatList, TouchableOpacity, Alert, Platform } from 'react-n
 import { Ionicons } from '@expo/vector-icons';
 import { useCardStore } from '../../store/CardStore';
 import Checkbox from 'expo-checkbox';
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
 import { useTheme } from '../../theme/ThemeContext';
 import CartItem from '../../components/CartItem/CartItem';
 import LottieViewAnimation from '../../components/LottieView/LottieViewAnimation';
 import Toast from 'react-native-toast-message';
 import { styles } from './CartScreen.styles';
+import { Product } from '../../types';
 
-const CartScreen: React.FC<{ route: any }> = () => {
-  const navigation = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'Cart'>;
+const CartScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
-  const { card, addToCard, removeFromCard, decreaseQuantity, clearCard } = useCardStore();
+  const { card, addToCard, removeFromCard, decreaseQuantity, clearCard, stokControl } = useCardStore();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loadingAnimated, setLoadingAnimated] = useState(false);
 
@@ -62,6 +64,19 @@ const CartScreen: React.FC<{ route: any }> = () => {
       ],
       { cancelable: true },
     );
+  };
+
+  const addToCardHandler = (product: Product) => {
+    if (!stokControl(product.id)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Stok yetersiz!',
+        position: 'bottom',
+        visibilityTime: 1000,
+      });
+      return;
+    }
+    addToCard(product);
   };
 
   return (
@@ -131,7 +146,8 @@ const CartScreen: React.FC<{ route: any }> = () => {
                 item={item}
                 isSelected={isSelected}
                 toggleSelect={toggleSelect}
-                addToCard={addToCard}
+                addToCard={addToCardHandler}
+                onPress={() => navigation.navigate('ProductDetail', { productId: item.product.id })}
                 decreaseQuantity={decreaseQuantity}
                 removeFromCard={confirmDelete}
               />

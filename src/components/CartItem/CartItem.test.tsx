@@ -19,6 +19,7 @@ const mockProps = {
   isSelected: false,
   toggleSelect: jest.fn(),
   addToCard: jest.fn(),
+  onPress: jest.fn(),
   decreaseQuantity: jest.fn(),
   removeFromCard: jest.fn(),
 };

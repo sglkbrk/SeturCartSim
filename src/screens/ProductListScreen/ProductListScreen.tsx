@@ -16,11 +16,11 @@ import Toast from 'react-native-toast-message';
 const LIMIT = 10;
 type Props = NativeStackScreenProps<RootStackParamList, 'ProductList'>;
 const ProductListScreen: React.FC<Props> = ({ navigation }) => {
-  const { addToCard, getTotalQuantity } = useCardStore();
+  const { addToCard, getTotalQuantity, stokControl } = useCardStore();
   const { theme, toggleTheme } = useTheme();
   const flatListRef = useRef<FlatList>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categorys, setCategorys] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>({
     slug: 'all',
     name: 'Tümü',
@@ -38,7 +38,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
       const data = await fetchProducts(currentSkip, LIMIT, category, currentSearch);
       setProducts((prev) => (currentSkip === 0 ? data.products : [...prev, ...data.products]));
       setSkip((prev) => prev + LIMIT);
-      if (data.length < LIMIT) setHasMore(false);
+      if (data.products.length < LIMIT) setHasMore(false);
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -47,6 +47,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
         position: 'bottom',
         visibilityTime: 3000,
       });
+      console.error('Ürünler getirilemedi:', error);
       return;
     }
     setLoading(false);
@@ -56,7 +57,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
     setLoading(true);
     try {
       const data = await fetchCategories();
-      setCategorys([{ slug: 'all', name: 'Tümü', url: '' }, ...data]);
+      setCategories([{ slug: 'all', name: 'Tümü', url: '' }, ...data]);
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -65,6 +66,8 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
         position: 'bottom',
         visibilityTime: 3000,
       });
+      console.error('Kategoriler getirilemedi:', error);
+      return;
     }
     setLoading(false);
   };
@@ -74,6 +77,15 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
   };
   const addToCardHandler = (product: Product) => {
     if (product) {
+      if (!stokControl(product.id)) {
+        Toast.show({
+          type: 'error',
+          text1: 'Stok yetersiz!',
+          position: 'bottom',
+          visibilityTime: 1000,
+        });
+        return;
+      }
       addToCard(product);
       Toast.show({
         type: 'info',
@@ -97,7 +109,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
 
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
-  // debounce TODO: Bu kısım daha güvenli hale getirilecek
+  // debounce TODO: Bu kısım daha güvenli hale getirilebilir ayrı bır kısımda yapılacak
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
@@ -147,7 +159,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.category}>
         <FlatList
           style={styles.categoryList}
-          data={categorys}
+          data={categories}
           renderItem={({ item }) => (
             <View style={styles.categoryItemWrapper}>
               <TouchableOpacity
@@ -194,7 +206,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
         keyExtractor={(item) => item.title}
         numColumns={2}
         columnWrapperStyle={styles.productColumn}
-        onEndReached={() => getProducts(skip, hasMore)}
+        onEndReached={() => getProducts(skip, hasMore, selectedCategory.slug, debouncedSearch)}
         onEndReachedThreshold={0.5}
         ListFooterComponent={loading ? <ActivityIndicator size="small" /> : null}
       />
