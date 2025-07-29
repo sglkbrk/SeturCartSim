@@ -110,6 +110,8 @@ describe('ProductDetailScreen', () => {
     fireEvent.press(shareButton);
     expect(shareMock).toHaveBeenCalledWith({
       message: expect.stringContaining(mockProduct.title),
+      title: 'Ürün Paylaş',
+      url: `https://dummyjson.com/products/${mockProduct.id}`,
     });
   });
 
