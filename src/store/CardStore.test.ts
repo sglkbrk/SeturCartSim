@@ -12,7 +12,6 @@ describe('useCardStore', () => {
   } as Partial<Product> as Product;
 
   beforeEach(() => {
-    // Testler arası state temizleme
     act(() => {
       useCardStore.getState().clearCard();
     });
@@ -47,14 +46,14 @@ describe('useCardStore', () => {
 
   it('Quantity should decrease, and if its less than 1, the product should be removed from the cart.', () => {
     act(() => {
-      useCardStore.getState().addToCard(sampleProduct); // quantity = 1
-      useCardStore.getState().addToCard(sampleProduct); // quantity = 2
-      useCardStore.getState().decreaseQuantity(sampleProduct.id); // quantity = 1
+      useCardStore.getState().addToCard(sampleProduct);
+      useCardStore.getState().addToCard(sampleProduct);
+      useCardStore.getState().decreaseQuantity(sampleProduct.id);
     });
     let card = useCardStore.getState().card;
     if (card[0]) expect(card[0].quantity).toBe(1);
     act(() => {
-      useCardStore.getState().decreaseQuantity(sampleProduct.id); // quantity 0, çıkarılacak
+      useCardStore.getState().decreaseQuantity(sampleProduct.id);
     });
     card = useCardStore.getState().card;
     expect(card).toHaveLength(0);
@@ -71,8 +70,8 @@ describe('useCardStore', () => {
 
   it('getTotalQuantity should calculate the total quantity correctly.', () => {
     act(() => {
-      useCardStore.getState().addToCard(sampleProduct); // quantity = 1
-      useCardStore.getState().addToCard(sampleProduct); // quantity = 2
+      useCardStore.getState().addToCard(sampleProduct);
+      useCardStore.getState().addToCard(sampleProduct);
     });
     const total = useCardStore.getState().getTotalQuantity();
     expect(total).toBe(2);

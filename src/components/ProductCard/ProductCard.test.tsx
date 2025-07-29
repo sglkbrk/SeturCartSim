@@ -23,7 +23,6 @@ describe('ProductCard', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    // Favori store mock fonksiyonlarını ayarla
     (useFavoriteStore as unknown as jest.Mock).mockReturnValue({
       toggleFavorite: toggleFavoriteMock,
       isFavorite: isFavoriteMock,

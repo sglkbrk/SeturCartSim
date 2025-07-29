@@ -101,7 +101,7 @@ describe('ProductListScreen', () => {
   it('renders category icon correctly', async () => {
     const { getByText, getByTestId } = await waitFor(() => render(<ProductListScreen route={route as any} navigation={mockNavigation as any} />));
     await waitFor(() => getByText('Laptops'));
-    const icon = getByTestId('icon-laptops'); // örneğin slug = smartphones
+    const icon = getByTestId('icon-laptops');
     expect(icon).toBeTruthy();
   });
   it('shows error toast if stock is not available when adding to cart', async () => {

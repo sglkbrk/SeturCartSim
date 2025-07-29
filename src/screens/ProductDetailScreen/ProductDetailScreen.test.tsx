@@ -55,7 +55,7 @@ describe('ProductDetailScreen', () => {
   });
 
   it('renders loading indicator initially', () => {
-    jest.spyOn(api, 'fetchProductById').mockImplementation(() => new Promise(() => {})); // never resolves
+    jest.spyOn(api, 'fetchProductById').mockImplementation(() => new Promise(() => {}));
     const route = { params: { productId: 1 } };
     const { getByTestId } = render(<ProductDetailScreen route={route as any} navigation={mockNavigation as any} />);
     expect(getByTestId('loading-indicator')).toBeTruthy();
@@ -66,10 +66,10 @@ describe('ProductDetailScreen', () => {
     const route = { params: { productId: 1 } };
     const { getByText } = render(<ProductDetailScreen route={route as any} navigation={mockNavigation as any} />);
     await waitFor(() => getByText(mockProduct.title));
-    expect(getByText(mockProduct.rating.toString())).toBeTruthy(); // Yıldız puanı
-    expect(getByText(mockProduct.reviews.length.toString())).toBeTruthy(); // Yorum sayısı
-    expect(getByText('Smartphones')).toBeTruthy(); // categoryText eşleşmesine göre (örnek: smartphones = Akıllı Telefonlar)
-    expect(getByText(mockProduct.stock.toString())).toBeTruthy(); // stok sayısı
+    expect(getByText(mockProduct.rating.toString())).toBeTruthy();
+    expect(getByText(mockProduct.reviews.length.toString())).toBeTruthy();
+    expect(getByText('Smartphones')).toBeTruthy();
+    expect(getByText(mockProduct.stock.toString())).toBeTruthy();
   });
 
   it('renders product details after fetch', async () => {

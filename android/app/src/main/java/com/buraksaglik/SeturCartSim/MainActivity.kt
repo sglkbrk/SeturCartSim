@@ -1,4 +1,4 @@
-package com.fivori.SeturCartSim
+package com.buraksaglik.SeturCartSim
 
 import android.os.Build
 import android.os.Bundle

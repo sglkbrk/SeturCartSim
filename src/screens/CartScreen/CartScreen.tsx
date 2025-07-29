@@ -30,7 +30,6 @@ const CartScreen: React.FC<Props> = ({ navigation }) => {
       setSelectedIds(card.map((item) => item.product.id));
     }
   };
-  // const totalQuantity = card.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = card.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
   const onPressBuy = () => {
     clearCard();

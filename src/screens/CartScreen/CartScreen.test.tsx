@@ -7,20 +7,16 @@ import Toast from 'react-native-toast-message';
 import { Product } from '../../types';
 import { Alert } from 'react-native';
 
-// Mock Navigation
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({ goBack: jest.fn() }),
 }));
 
-// Mock Toast
 jest.mock('react-native-toast-message', () => ({
   show: jest.fn(),
 }));
 
-// Silence animation warning
 jest.mock('lottie-react-native', () => 'LottieView');
 
-// Sample product
 const mockProduct: Product = {
   id: 1,
   title: 'Mock Product',

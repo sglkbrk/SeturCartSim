@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.fivori.SeturCartSim</string>
+          <string>com.buraksaglik.SeturCartSim</string>
         </array>
       </dict>
     </array>

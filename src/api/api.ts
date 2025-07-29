@@ -11,7 +11,6 @@ export const fetchProducts = async (skip: number, limit: number, category?: stri
     } else {
       url = `/products?limit=${limit}&skip=${skip}`;
     }
-    console.log(url);
     const response = await axios.get(API_BASE_URL + url);
     return response.data;
   } catch (error) {

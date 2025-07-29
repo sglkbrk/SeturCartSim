@@ -28,7 +28,6 @@ describe('LottieViewAnimation', () => {
   //     const { getByTestId } = render(<LottieViewAnimation animation="Excellent" position="bottom" visible={true} onFinish={onFinishMock} />);
 
   //     const animation = getByTestId('lottie-animation');
-  //     // Simüle animasyon bitişi
   //     animation.props.onAnimationFinish();
   //     expect(onFinishMock).toHaveBeenCalled();
   //   });

@@ -45,7 +45,9 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
   const onShare = async () => {
     try {
       await Share.share({
-        message: `Bu ürünü incele: ${product?.title} - ₺${product?.price}\n\nhttps://dummyjson.com/products/${product?.id}`,
+        message: `Bu ürünü incele: ${product?.title}`,
+        url: `https://dummyjson.com/products/${product?.id}`,
+        title: 'Ürün Paylaş',
       });
     } catch (error) {
       console.error('Paylaşım hatası:', error);
@@ -116,7 +118,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route }) => {
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
         ) : (
-          <View style={styles.headerButton} /> // Yer tutucu boş alan
+          <View style={styles.headerButton} />
         )}
         <View style={styles.headerButtons}>
           <TouchableOpacity style={[styles.headerButton, { backgroundColor: theme.cardBg }]} onPress={() => toggleFavorite(product.id)}>

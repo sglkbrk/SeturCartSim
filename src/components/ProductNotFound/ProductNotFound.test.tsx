@@ -3,7 +3,6 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import ProductNotFound from './ProductNotFound';
 import { useTheme } from '../../theme/ThemeContext';
 
-// useTheme hook'unu mock'la
 jest.mock('../../theme/ThemeContext', () => ({
   useTheme: jest.fn(),
 }));
@@ -26,8 +25,6 @@ describe('ProductNotFound', () => {
 
     expect(getByText('Ürün bulunamadı')).toBeTruthy();
     expect(getByText('Geri Dön')).toBeTruthy();
-
-    // Ionicons'lar genellikle accessibilityRole yoktur ama text ve button var
     const button = getByText('Geri Dön').parent;
     expect(button).toBeTruthy();
   });

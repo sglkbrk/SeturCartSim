@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import { ThemeProvider, useTheme } from './ThemeContext'; // yolu kendine göre ayarla
+import { ThemeProvider, useTheme } from './ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appearance, Text, Button } from 'react-native';
 
