@@ -161,7 +161,9 @@ const CartScreen: React.FC<Props> = ({ navigation }) => {
             onPress={onPressBuy}
             style={[styles.buy, { backgroundColor: theme.accentGreen }]}
           >
-            <Text style={styles.buyText}>Satın Al</Text>
+            <Text testID="buy-text" style={styles.buyText}>
+              Satın Al
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
